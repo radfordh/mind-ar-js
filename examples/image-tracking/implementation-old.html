@@ -1,0 +1,122 @@
+<!--
+ multi-target example
+-->
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/16/Stats.min.js"></script>
+    <script src="../../src/image-target/aframe.js" type="module"></script>
+
+    <style>
+      body {
+        margin: 0;
+      }
+      .example-container {
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .example-container video {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 640px !important;
+        height: 480px !important;
+        max-width: 80vw !important;
+        max-height: 80vh !important;
+        object-fit: contain !important;
+      }
+
+      #example-control-overlay {
+	background: none;
+	height: 30px;
+      }
+      #example-control-overlay >div {
+	position: absolute;
+	right: 0;
+      }
+
+   </style>
+
+   <script>
+     document.addEventListener("DOMContentLoaded", () => {
+       const startButton = document.querySelector("#start-button");
+       const detectAllButton = document.getElementById("detect-all-button");
+       const detect0Button = document.getElementById("detect-0-button");
+       const detect1Button = document.getElementById("detect-1-button");
+       const detect2Button = document.getElementById("detect-2-button");
+       const detect3Button = document.getElementById("detect-3-button");
+       const sceneEl = document.querySelector('a-scene');
+       const arSystem = sceneEl.systems["mindar-image-system"];
+
+      detectAllButton.addEventListener("click", () => {
+        console.log("detecting all...");
+        arSystem.switchTarget(-1);
+      });
+      detect0Button.addEventListener("click", () => {
+        console.log("detecting 0 only...");
+        arSystem.switchTarget(0);
+      });
+      detect1Button.addEventListener("click", () => {
+        console.log("detecting 1 only...");
+        arSystem.switchTarget(1);
+      });
+      detect2Button.addEventListener("click", () => {
+        console.log("detecting 2 only...");
+        arSystem.switchTarget(2);
+      });
+      detect3Button.addEventListener("click", () => {
+        console.log("detecting 3 only...");
+        arSystem.switchTarget(3);
+      });
+      startButton.addEventListener('click', () => {
+	      arSystem.start(); // start AR
+      });
+
+     });
+     
+   </script>
+  </head>
+  <body>
+    <div id="example-control-overlay" class="overlay">
+      <div>
+	<button id="start-button">Start</button>
+	<button id="detect-all-button">Detect All</button>
+	<button id="detect-0-button">Detect 0</button>
+	<button id="detect-1-button">Detect 1</button>
+    <button id="detect-2-button">Detect 2</button>
+    <button id="detect-3-button">Detect 3</button>
+      </div>
+    </div>
+
+    <div class="example-container">
+      <a-scene mindar-image="imageTargetSrc: ./assets/implementation-files/targets.mind; showStats: true; autoStart: false; maxTrack: 4; uiScanning: no; filterMinCF: 0.001; filterBeta: 10; missTolerance: 5" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+        <a-assets>
+          <img id="image1" src="./assets/implementation-files/588b_1.png" />
+          <img id="image2" src="./assets/implementation-files/588b_2.png" />
+          <img id="image3" src="./assets/implementation-files/588b_3.png" />
+          <img id="image4" src="./assets/implementation-files/588b_4.png" />
+        </a-assets>
+
+        <a-camera position="0 0 0" look-controls="enabled: false">
+        </a-camera>
+        <a-entity id="target-0" mindar-image-target="targetIndex: 0">
+          <a-text value="1" color="green" align="center" position="0 0 0.01" scale="0.8 0.8 0.8" look-at="[camera]"></a-text>
+        </a-entity>
+        <a-entity id="target-1" mindar-image-target="targetIndex: 1">
+          <a-text value="2" color="green" align="center" position="0 0 0.01" scale="0.8 0.8 0.8" look-at="[camera]"></a-text>
+        </a-entity>
+        <a-entity id="target-2" mindar-image-target="targetIndex: 2">
+          <a-text value="3" color="green" align="center" position="0 0 0.01" scale="0.8 0.8 0.8" look-at="[camera]"></a-text>
+        </a-entity>
+        <a-entity id="target-3" mindar-image-target="targetIndex: 3">
+          <a-text value="4" color="green" align="center" position="0 0 0.01" scale="0.8 0.8 0.8" look-at="[camera]"></a-text>
+        </a-entity>
+      </a-scene>
+    </div>
+  </body>
+</html>
