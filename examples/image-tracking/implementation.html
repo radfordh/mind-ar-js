@@ -50,6 +50,48 @@
 	right: 0;
       }
 
+      #progress-container {
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        max-width: 400px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        border-radius: 10px;
+        z-index: 100;
+      }
+
+      #progress-text {
+        color: white;
+        text-align: center;
+        margin-bottom: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+      }
+
+      #progress-bar {
+        width: 100%;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        overflow: hidden;
+      }
+
+      #progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4CAF50, #8BC34A);
+        width: 0%;
+        transition: width 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+      }
+
    </style>
 
    <script>
@@ -62,6 +104,34 @@
        const detect3Button = document.getElementById("detect-3-button");
        const sceneEl = document.querySelector('a-scene');
        const arSystem = sceneEl.systems["mindar-image-system"];
+
+       // Progress tracking
+       const totalTargets = 4;
+       const foundTargets = new Set();
+       const progressFill = document.getElementById('progress-fill');
+       const progressText = document.getElementById('progress-text');
+
+       function updateProgress() {
+         const percentage = (foundTargets.size / totalTargets) * 100;
+         progressFill.style.width = percentage + '%';
+         progressFill.textContent = Math.round(percentage) + '%';
+         progressText.textContent = `Found ${foundTargets.size} of ${totalTargets} images`;
+       }
+
+       // Listen for target found events
+       for (let i = 0; i < totalTargets; i++) {
+         const target = document.getElementById(`target-${i}`);
+         target.addEventListener('targetFound', () => {
+           if (!foundTargets.has(i)) {
+             foundTargets.add(i);
+             updateProgress();
+             console.log(`Target ${i} found for the first time!`);
+           }
+         });
+       }
+
+       // Initialize progress display
+       updateProgress();
 
       detectAllButton.addEventListener("click", () => {
         console.log("detecting all...");
@@ -88,7 +158,7 @@
       });
 
      });
-     
+
    </script>
   </head>
   <body>
@@ -100,6 +170,13 @@
 	<button id="detect-1-button">Detect 1</button>
     <button id="detect-2-button">Detect 2</button>
     <button id="detect-3-button">Detect 3</button>
+      </div>
+    </div>
+
+    <div id="progress-container">
+      <div id="progress-text">Found 0 of 4 images</div>
+      <div id="progress-bar">
+        <div id="progress-fill">0%</div>
       </div>
     </div>
 
